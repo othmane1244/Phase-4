@@ -144,6 +144,81 @@ python simulator.py
 
 ---
 
+## Dashboard Next.js 14
+
+### Structure des fichiers
+
+```
+dashboard/
+├── app/
+│   ├── layout.tsx          — Layout général + métadonnées
+│   ├── page.tsx            — Page principale du dashboard (SSR)
+│   └── globals.css         — Styles globaux Tailwind
+├── components/
+│   ├── AlertList.tsx       — Liste alertes temps réel (Supabase Realtime)
+│   ├── StatsCards.tsx      — Cartes statistiques
+│   └── AlertBadge.tsx      — Badge coloré par type d'alerte
+├── lib/
+│   └── supabase.ts         — Client Supabase + types TypeScript
+├── .env.local              — Clés Supabase (ne pas committer)
+└── package.json
+```
+
+### Installation
+
+```bash
+cd dashboard
+npm install
+npm install @supabase/supabase-js lucide-react recharts
+```
+
+### Variables d'environnement `.env.local`
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://votre-projet.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=votre-clé-anon-publique
+```
+
+> ⚠️ Utiliser la clé **`anon`** (publique) pour le dashboard — jamais `service_role`.
+
+### Lancement
+
+```bash
+npm run dev
+```
+
+Ouvre **`http://localhost:3000`**
+
+### Fonctionnalités
+
+| Composant | Description |
+|---|---|
+| `StatsCards` | 6 cartes : total, non résolues, intrusions, chutes, objets abandonnés, attroupements |
+| `AlertList` | Liste temps réel via Supabase Realtime — sans rechargement |
+| `AlertBadge` | Badge coloré : 🚨 Intrusion · 🆘 Chute · 🎒 Objet abandonné · 👥 Attroupement |
+| Pipeline panel | Latences étape par étape Edge-to-Cloud |
+
+### Lancement complet (3 terminaux)
+
+**Terminal 1 — API FastAPI :**
+```bash
+cd "T3 dachbord" && hailo_env\Scripts\activate
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+
+**Terminal 2 — Dashboard :**
+```bash
+cd dashboard && npm run dev
+```
+
+**Terminal 3 — Simulateur webcam :**
+```bash
+cd "T3 dachbord" && hailo_env\Scripts\activate
+python simulator.py
+```
+
+---
+
 ## Règles de détection
 
 | Comportement | Condition | Seuil |
@@ -173,7 +248,7 @@ Tous les seuils sont configurables dans `services.py`.
 - [x] **Phase 2** — Sélection modèle IA (YOLO11n)
 - [x] **Phase 3** — Architecture logicielle Edge-to-Cloud
 - [x] **Phase 4** — Conversion modèle + API FastAPI + Supabase
-- [ ] **Phase 5** — Dashboard Next.js 14
+- [x] **Phase 5** — Dashboard Next.js 14
 - [ ] **Phase 6** — Déploiement RPi 5 + Hailo-8 (en attente matériel)
 - [ ] **Phase 7** — Tests et benchmarks réels
 
