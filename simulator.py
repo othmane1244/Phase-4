@@ -60,10 +60,14 @@ COLORS = np.random.randint(0, 255, size=(len(CLASSES), 3), dtype=np.uint8)
 # MODÈLE ONNX
 # ------------------------------------------------------------
 def load_model():
-    providers = ["CUDAExecutionProvider", "CPUExecutionProvider"]
+    # DirectML : GPU Windows universel (RTX 5060, CUDA 13.x+, AMD, Intel)
+    # Pas de dépendance à la version CUDA — fonctionne via DirectX 12
+    providers = ["DmlExecutionProvider", "CPUExecutionProvider"]
     session = ort.InferenceSession(ONNX_MODEL, providers=providers)
     provider = session.get_providers()[0]
     logger.info(f"✅ ONNX chargé — Provider : {provider}")
+    if provider == "CPUExecutionProvider":
+        logger.warning("⚠️  GPU non détecté — inférence sur CPU (vérifier onnxruntime-directml)")
     return session
 
 

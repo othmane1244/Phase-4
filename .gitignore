@@ -1,4 +1,3 @@
-@"
 # Environnement Python
 hailo_env/
 __pycache__/
@@ -7,6 +6,7 @@ __pycache__/
 
 # Variables d'environnement (NE JAMAIS publier)
 .env
+.env.local
 
 # Modèles (trop lourds pour GitHub)
 *.pt
@@ -19,4 +19,6 @@ screenshot_*.jpg
 # Node.js (dashboard)
 node_modules/
 .next/
-"@ | Out-File -FilePath .gitignore -Encoding utf8
+
+# Claude Code (mémoire locale, ne pas publier)
+.claude/
